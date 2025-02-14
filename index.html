@@ -3,67 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamische Zahl Test</title>
+    <title>Google Sheet Test - A1</title>
     <style>
-        /* Transparenter Hintergrund */
         body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: transparent; /* Transparenter Hintergrund */
-            color: white;
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-size: 50px;
+            margin: 0;
+            padding: 20px;
+            background-color: transparent;
+            color: white;
+        }
+
+        .output {
+            font-size: 30px;
+            font-weight: bold;
+            color: #FFD700; /* Goldene Farbe für den Text */
             text-align: center;
         }
-
-        .moving-text {
-            position: absolute;
-            font-size: 50px;
-            font-weight: bold;
-            white-space: nowrap;
-            animation: moveText 5s linear infinite;
-        }
-
-        @keyframes moveText {
-            0% {
-                transform: translateX(100%);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-        /* Dynamische Zahl */
-        .dynamic-number {
-            font-size: 60px;
-            font-weight: bold;
-            color: #FFD700; /* Goldene Farbe für die Zahl */
-        }
-
     </style>
 </head>
 <body>
-    <div class="moving-text">
-        **Willkommen zu TikTok Stream Test!**
-    </div>
+    <h2>Google Sheet Test - A1</h2>
+    <p>Wert aus Zelle A1:</p>
 
-    <!-- Dynamische Zahl -->
-    <div class="dynamic-number" id="dynamicNumber">0</div>
+    <div class="output" id="output">Lädt...</div>
 
     <script>
-        // Dynamische Zahl, die sich alle 2 Sekunden ändert
-        let number = 0;
-        const numberElement = document.getElementById("dynamicNumber");
+        // Google Sheet CSV-Link
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRAX-rHZrJ5iibfFARYX7bRUoE-UzISfjoFyjRq03ksqPokV9eht2RkoYnFaxA0DbLCtxSqONGpQhj7/pub?output=csv';
 
-        setInterval(() => {
-            number++;
-            numberElement.textContent = number;
-        }, 1000); // Alle 1000 Millisekunden (1 Sekunde) wird die Zahl erhöht
+        // Funktion zum Laden der CSV-Daten
+        async function loadCSVData() {
+            const response = await fetch(csvUrl);
+            const csvText = await response.text();
+
+            // CSV-Daten in ein Array umwandeln
+            const rows = csvText.split('\n').map(row => row.split(','));
+
+            // Hier extrahieren wir den Wert der ersten Zelle (A1)
+            const a1Value = rows[0][0]; // A1 ist die erste Zelle, die in der ersten Zeile, erste Spalte ist
+
+            // Den Wert in der Ausgabe anzeigen
+            const outputElement = document.getElementById('output');
+            outputElement.textContent = a1Value || 'Kein Wert gefunden'; // Falls A1 leer ist, wird ein Ersatztext angezeigt
+        }
+
+        // CSV-Daten laden
+        loadCSVData();
     </script>
 </body>
 </html>
