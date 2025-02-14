@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestell-Overlay</title>
+    <style>
+        body { background: transparent; color: white; font-size: 30px; text-align: center; font-weight: bold; }
+        #order-box {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 15px;
+            animation: fadeInOut 6s ease-in-out;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="order-box">
+        <h2>🔥 NEUE BESTELLUNG! 🔥</h2>
+        <p id="order-text">...</p>
+    </div>
+
+    <script>
+        let lastOrder = "";
+
+        async function checkForNewOrder() {
+            try {
+                const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRAX-rHZrJ5iibfFARYX7bRUoE-UzISfjoFyjRq03ksqPokV9eht2RkoYnFaxA0DbLCtxSqONGpQhj7/pub?output=csv");
+                const text = await response.text();
+                const rows = text.split("\n");
+                const latestRow = rows[rows.length - 2].split(",");
+
+                const product = latestRow[0];
+                const buyer = latestRow[1];
+                const newOrder = `${buyer} hat ${product} gekauft!`;
+
+                if (newOrder !== lastOrder) {
+                    lastOrder = newOrder;
+                    showOrder(newOrder);
+                }
+            } catch (error) {
+                console.error("Fehler beim Abrufen der Bestellung:", error);
+            }
+        }
+
+        function showOrder(order) {
+            document.getElementById("order-text").innerText = order;
+            const orderBox = document.getElementById("order-box");
+            orderBox.style.display = "block";
+
+            setTimeout(() => {
+                orderBox.style.display = "none";
+            }, 5000); // Nach 5 Sekunden ausblenden
+        }
+
+        setInterval(checkForNewOrder, 10000); // Alle 10 Sekunden prüfen
+    </script>
+
+</body>
+</html>
