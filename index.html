@@ -3,20 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Bewegender Text</title>
+    <title>Dynamische Zahl Test</title>
     <style>
+        /* Transparenter Hintergrund */
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background-color: black;
+            background-color: transparent; /* Transparenter Hintergrund */
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            font-size: 50px;
+            text-align: center;
         }
+
         .moving-text {
             position: absolute;
             font-size: 50px;
@@ -33,11 +37,33 @@
                 transform: translateX(-100%);
             }
         }
+
+        /* Dynamische Zahl */
+        .dynamic-number {
+            font-size: 60px;
+            font-weight: bold;
+            color: #FFD700; /* Goldene Farbe für die Zahl */
+        }
+
     </style>
 </head>
 <body>
     <div class="moving-text">
-        **Die Seite aktualisiert sich regelmäßig!**
+        **Willkommen zu TikTok Stream Test!**
     </div>
+
+    <!-- Dynamische Zahl -->
+    <div class="dynamic-number" id="dynamicNumber">0</div>
+
+    <script>
+        // Dynamische Zahl, die sich alle 2 Sekunden ändert
+        let number = 0;
+        const numberElement = document.getElementById("dynamicNumber");
+
+        setInterval(() => {
+            number++;
+            numberElement.textContent = number;
+        }, 1000); // Alle 1000 Millisekunden (1 Sekunde) wird die Zahl erhöht
+    </script>
 </body>
 </html>
